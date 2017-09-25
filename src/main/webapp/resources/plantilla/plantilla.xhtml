@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>WebTopics</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <ui:insert name="cabeceraPersonalizada">
+
+        </ui:insert>
+        <h:outputStylesheet library="css" name="estilos.css"/>
+    </h:head>
+    <h:body>
+        <div class="container-fluid">
+            <div id="cabecera" class="col-lg-12">
+                <div>
+                    <header>
+                        <div class="col-lg-4">
+
+                        </div>
+                        <div class="col-lg-4 centrar">
+                             <h:link outcome="/index.xhtml"><img src="#{request.contextPath}/resources/imagenes/logo.png" width="240px" height="100px"/></h:link>
+                        </div>
+                        <div class="col-lg-4">
+                        </div>
+                    </header>
+                </div>
+            </div>
+            <div id="navegacion" class="col-lg-12">
+                <p>navegacion</p>
+            </div>
+            <div id="contenido" class="col-lg-12">
+                <ui:insert name="contenido">
+                    <p>Aqui debe aparecer el contenido propio de cada pagina</p>
+                </ui:insert>
+            </div>
+            <div id="pie" class="col-lg-12">
+                <div class="col-lg-12 centrar">
+                    <p style="height: 80px;">Pie</p>
+                </div>
+            </div>
+        </div>
+
+    </h:body>
+</html>
+
