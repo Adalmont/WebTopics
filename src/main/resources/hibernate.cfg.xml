@@ -11,5 +11,11 @@
         <!-- Pool de conexiones -->
         <property name="hibernate.connection.pool_size">1</property>
         <property name="hibernate.connection.datasource">java:comp/env/jdbc/webtopics</property>
+        <mapping class="es.adrian.beans.Usuario"/>
+        <mapping class="es.adrian.beans.Amigo"/>
+        <mapping class="es.adrian.beans.Mensaje"/>
+        <mapping class="es.adrian.beans.Categoria"/>
+        <mapping class="es.adrian.beans.Privado"/>
+        <mapping class="es.adrian.beans.Tema"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions">
+    <h:head>
+        <title>Facelet Title</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <h:outputStylesheet library="css" name="estilos.css"/>    
+    </h:head>
+    <h:body>
+
+        <ui:composition template="/resources/plantilla/plantilla.xhtml">
+            <ui:define name="contenido">
+                <h1 class="centrar colorAzulOscuro">Perfil de #{usuario.apodo}</h1>
+                <h3 class="centrar colorAzulOscuro">#{usuario.mensaje}</h3>
+                    <div class="row col-lg-12 centrar hidden" id="datos">
+                        <c:choose>
+                            <c:when test="#{usuario.avatar==null}">
+                                <h:form enctype="multipart/form-data">
+                                    <h:outputLabel value="Avatar: "/>
+                                    <h:inputFile value="#{usuario.imgSubir}" class="centrarTabla"  id="iAvatar"></h:inputFile>
+                                    <h:commandButton value="Actualizar" action="#{usuario.subirAvatar()}"/>
+                                </h:form>
+                            </c:when>
+                            <c:otherwise>
+                                <h:graphicImage alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/#{usuario.avatar}" height="120" width="120"/>
+                            </c:otherwise>
+                        </c:choose>
+                        <h:panelGrid columns="2" border="0" cellspacing="2" class="centrarTabla">
+                            <h:outputLabel value="Apodo"/><h:outputText value="#{usuario.apodo}"/>
+                            <h:outputLabel value="Nombre: "/><h:outputText value="#{usuario.nombre}"/>
+                            <h:outputLabel value="Apellidos: "/><h:outputText value="#{usuario.apellidos}"/>
+                            <h:outputLabel value="Email: "/><h:outputText value="#{usuario.email}"/>
+                        </h:panelGrid>
+                        <c:if test="#{usuario.tipo eq 'm'}">
+                            <h3 class="ColorAmarillo">Moderador</h3>
+                        </c:if>
+                        <c:if test="#{usuario.tipo eq 'a'}">
+                            <h3 class="ColorAmarillo">Administrador</h3>
+                        </c:if>
+                    </div>
+                <script>
+                    $("#botonDatos").click(function () {
+                        $("#botonDatos").addClass("hidden");
+                        if ($("#botonPromo").hasClass("hidden")) {
+                            $("#botonPromo").removeClass("hidden");
+                        }
+                        if ($("#datos").hasClass("hidden")) {
+                            if (!$("#promocion").hasClass("hidden")) {
+                                $("#promocion").addClass("hidden");
+                            }
+                            $("#datos").removeClass("hidden");
+                        }
+                    });
+                    $("#botonPromo").click(function () {
+                        $("#botonPromo").addClass("hidden");
+                        if ($("#botonDatos").hasClass("hidden")) {
+                            $("#botonDatos").removeClass("hidden");
+                        }
+                        if ($("#promocion").hasClass("hidden")) {
+                            if (!$("#datos").hasClass("hidden")) {
+                                $("#datos").addClass("hidden");
+                            }
+                            $("#promocion").removeClass("hidden");
+                        }
+                    });
+                </script>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

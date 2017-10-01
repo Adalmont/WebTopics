@@ -1,0 +1,60 @@
+.centrar{
+    text-align: center;
+}
+.colorFondoAzul{
+    background-color: #8181a0;
+}
+.colorFondoAzulOscuro{
+    background-color: #383875; 
+}
+.colorAzul{
+    color: #8181a0;
+}
+.colorAzulOscuro{
+    color: #383875;
+}
+.colorRojo{
+    color: red;
+}
+.colorFondoGris{
+    background-color: #999999;
+}
+.colorFondoGrisOscuro{
+    background-color: #666666;
+}
+.navegacion{
+    display: inline;
+}
+.centrarForm{
+    margin-left: 20%;
+}
+.centrarFormMensaje{
+    margin-left:30%;
+}
+.centrarTabla{
+    margin-left: 40%;
+}
+.centrarImg{
+    margin-left: 45%;
+}
+.botonesCabecera{
+    margin-top: 10%;
+}
+.mensajeOferta{
+    font-size: 16px;
+}
+.mensajeLista{
+    margin-left: 20%;
+    margin-right: 20%;
+}
+.elementoMensaje{
+    border: solid;
+    margin-top:2%;
+}
+.listaNav{
+    list-style: none;
+    float: left;
+}
+.navEl{
+    display: inline;
+}
