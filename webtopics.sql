@@ -13,7 +13,7 @@
 
 
 -- Volcando estructura de base de datos para webtopics
-CREATE DATABASE IF NOT EXISTS `webtopics` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `webtopics`  DEFAULT CHARACTER SET utf8;
 USE `webtopics`;
 
 -- Volcando estructura para tabla webtopics.amigos
@@ -36,18 +36,19 @@ DELETE FROM `amigos`;
 CREATE TABLE IF NOT EXISTS `categorias` (
   `idCategoria` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) DEFAULT NULL,
+  `descripcion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idCategoria`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla webtopics.categorias: ~5 rows (aproximadamente)
 DELETE FROM `categorias`;
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
-INSERT INTO `categorias` (`idCategoria`, `nombre`) VALUES
-	(1, 'Actualidad'),
-	(2, 'Deporte'),
-	(3, 'Tecnologia'),
-	(4, 'Entretenimiento'),
-	(5, 'Miscelanea');
+INSERT INTO `categorias` (`idCategoria`, `nombre`, `descripcion`) VALUES
+	(1, 'Actualidad', 'El dia a dia del mundo'),
+	(2, 'Deporte', 'El ultimo partido de la liga, el nuevo fichaje de tu equipo favorito, toda la actualidad deportiva'),
+	(3, 'Tecnologia', 'Desde los aparatos mas retro hasta la tecnologia mas puntera'),
+	(4, 'Entretenimiento', '¿Quien ganará los Oscar? ¿Habeis escuchado el ultimo disco de Iron Maiden?'),
+	(5, 'Miscelanea', 'Cajon desastre, todo vale');
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 
 -- Volcando estructura para tabla webtopics.mensajes
@@ -102,11 +103,17 @@ CREATE TABLE IF NOT EXISTS `temas` (
   KEY `FK_tema-categoria` (`idCategoria`),
   CONSTRAINT `FK_tema-categoria` FOREIGN KEY (`idCategoria`) REFERENCES `categorias` (`idCategoria`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_tema-usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla webtopics.temas: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla webtopics.temas: ~4 rows (aproximadamente)
 DELETE FROM `temas`;
 /*!40000 ALTER TABLE `temas` DISABLE KEYS */;
+INSERT INTO `temas` (`idTema`, `idUsuario`, `idCategoria`, `titulo`, `fechaCreacion`, `mensajeInicial`, `estado`) VALUES
+	(1, 3, 1, 'prueba Actualidad', '2017-10-09 23:25:59', 'prueba de tema', 'a'),
+	(2, 3, 2, ' prueba Deporte', '2017-10-09 23:26:20', 'prueba de tema', 'a'),
+	(3, 3, 3, 'prueba Tecnologia', '2017-10-09 23:26:36', 'prueba de tema', 'a'),
+	(4, 3, 4, 'prueba Entretenimiento', '2017-10-09 23:26:51', 'prueba de tema', 'a'),
+	(5, 3, 5, 'prueba Miscelanea', '2017-10-09 23:27:06', 'prueba de tema', 'a');
 /*!40000 ALTER TABLE `temas` ENABLE KEYS */;
 
 -- Volcando estructura para tabla webtopics.usuarios

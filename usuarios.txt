@@ -1,0 +1,3 @@
+EMAIL			CLAVE			ROL
+	
+prueba@prueba.com	prueba			usuario
