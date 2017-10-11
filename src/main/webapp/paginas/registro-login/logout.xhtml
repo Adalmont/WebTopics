@@ -13,7 +13,7 @@
         pagina logout
         <ui:composition template="/resources/plantilla/plantilla.xhtml">
             <ui:define name="contenido">
-                <f:event type="preRenderView" listener="#{usuario.limpiarDatos()}"/>
+                <f:event type="preRenderComponent" listener="#{usuario.logOut()}"/>
                 <h1 class="centrar colorAzul">Desconectado con exito</h1>
                 <div class="col-lg-12 centrar">
                     <h:link styleClass="btn btn-primary" outcome="/index.xhtml" value="Volver"></h:link>

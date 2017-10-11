@@ -21,7 +21,7 @@
             <ui:define name="contenido">
                 <h1 class="centrar colorAzulOscuro">Perfil de #{usuario.apodo}</h1>
                 <h3 class="centrar colorAzulOscuro">#{usuario.mensaje}</h3>
-                    <div class="row col-lg-12 centrar hidden" id="datos">
+                    <div class="row col-lg-12 centrar" id="datos">
                         <c:choose>
                             <c:when test="#{usuario.avatar==null}">
                                 <h:form enctype="multipart/form-data">

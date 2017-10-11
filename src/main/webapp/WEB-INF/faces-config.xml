@@ -48,4 +48,31 @@
         </navigation-case>
     </navigation-rule>
 
+    <navigation-rule>
+        <from-view-id>/paginas/categorias/listaCategorias.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{tema.elegirCat(categoriaActual)}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{tema.elegirCat(categoriaActual)}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/paginas/temas/listaTemas.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{temaActual.elegirTema(temaActual)</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/temaIndividual.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>

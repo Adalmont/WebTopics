@@ -58,3 +58,17 @@
 .navEl{
     display: inline;
 }
+
+.descCat{
+    float:left;
+}
+
+.tema{
+    border: solid;
+}
+.tituModerador{
+    color: darkgoldenrod;
+}
+.tituAdmin{
+    color: firebrick;
+}

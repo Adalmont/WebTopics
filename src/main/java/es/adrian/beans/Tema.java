@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
@@ -28,6 +29,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import javax.servlet.http.Part;
 import org.apache.commons.codec.binary.Base64;
@@ -57,12 +59,14 @@ public class Tema implements Serializable {
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
     private String titulo;
-    private String fechaAlta;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaCreacion;
     private String mensajeInicial;
     private String estado;
-    /*NUEVO*/
     @Transient
     private String mensaje;
+    @Transient
+    private Categoria catElegida;
 
     public int getIdTema() {
         return idTema;
@@ -96,12 +100,12 @@ public class Tema implements Serializable {
         this.titulo = titulo;
     }
 
-    public String getFechaAlta() {
-        return fechaAlta;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setFechaAlta(String fechaAlta) {
-        this.fechaAlta = fechaAlta;
+    public void setFechaCreacion(Date fechaAlta) {
+        this.fechaCreacion = fechaAlta;
     }
 
     public String getMensajeInicial() {
@@ -128,6 +132,15 @@ public class Tema implements Serializable {
         this.mensaje = mensaje;
     }
 
+    public Categoria getCatElegida() {
+        return catElegida;
+    }
+
+    public void setCatElegida(Categoria catElegida) {
+        this.catElegida = catElegida;
+    }
+
+    
     /**
      * metodo para reiniciar los datos del bean
      */
@@ -136,7 +149,7 @@ public class Tema implements Serializable {
         this.usuario = null;
         this.categoria = null;
         this.titulo = null;
-        this.fechaAlta = null;
+        this.fechaCreacion = null;
         this.mensajeInicial = null;
     }
 
@@ -162,22 +175,9 @@ public class Tema implements Serializable {
     /**
      * metodo para obtener una lista de temas segun la condicion que se le pase
      *
-     * @param condicion la condicion que tienen que cumplir los temas que se
-     * desean
      * @return lista de temas
      */
-    public ArrayList<Tema> getTemas(String condicion) {
-        try {
-            DAOFactory daof = DAOFactory.getDAOFactory();
-            IGenericoDAO gdao = daof.getGenericoDAO();
-            ArrayList<Tema> listaTemas = (ArrayList<Tema>) gdao.get("Tema" + condicion);
-            return listaTemas;
-        } catch (HibernateException | NullPointerException e) {
-            limpiarDatos();
-            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
-            return null;
-        }
-    }
+   
 
     public String deleteTema() {
         try {
@@ -203,6 +203,33 @@ public class Tema implements Serializable {
             limpiarDatos();
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
             return "false";
+        }
+    }
+    
+    
+    public String elegirCat(Categoria categoriaElegida) {
+        if (categoriaElegida != null) {
+            this.catElegida = categoriaElegida;
+            return "true";
+        } else {
+            return "false";
+        }
+    }
+    
+    public ArrayList<Tema> getTemas() {
+        try {
+            DAOFactory daof = DAOFactory.getDAOFactory();
+            IGenericoDAO gdao = daof.getGenericoDAO();
+            ArrayList<Tema> listaTemas = null;
+            System.out.print ("ESTACATEGORIA: "+this.catElegida.getIdCategoria());
+            if (this.catElegida.getIdCategoria()!=0){
+                listaTemas = (ArrayList<Tema>) gdao.get("Tema where idCategoria = "+this.catElegida.getIdCategoria());
+            }
+            return listaTemas;
+        } catch (HibernateException | NullPointerException e) {
+            limpiarDatos();
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
+            return null;
         }
     }
 }

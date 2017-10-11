@@ -183,11 +183,12 @@ public class Usuario implements Serializable {
      * Metodo que reinicia los datos del usuario y devuelve una cadena para la
      * navegacion de jsf
      *
-     * @return true
+     * 
+     * @throws java.io.IOException
      */
-    public String logOut() {
+    public void logOut() throws IOException {
         limpiarDatos();
-        return "true";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/WebTopics/faces/index.xhtml");
     }
 
     /**

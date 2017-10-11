@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <h:outputStylesheet library="css" name="estilos.css" />
+    </h:head>
+    <ui:composition template="/resources/plantilla/plantilla.xhtml">
+        <ui:define name="contenido">
+            <f:event type="preRenderView" listener="tema.limpiarDatos()" />
+            <div class="col-lg-12 centrar">
+                <h2>#{categoria.nombre}</h2>
+            </div>
+            <c:choose>
+                <c:when test="#{not empty tema.temas}">
+                    <c:forEach var="temaActual" items="#{tema.temas}">
+                        <c:if test="#{temaActual.estado !='b'}">
+                            <div class="col-lg-12 tema">
+                                <div class="col-lg-6">
+                                    <!--
+                                    <h:commandLink value="{temaActual.nombre}" action="{temaActual.elegirTema(temaActual)}" />
+                                    -->
+                                    <c:choose>
+                                        <c:when test="#{temaActual.usuario.tipo eq 'm'}">
+                                            <h:outputText styleClass="tituModerador" value="#{temaActual.titulo}" />
+                                        </c:when>
+                                        <c:when test="#{temaActual.usuario.tipo eq 'a'}">
+                                            <h:outputText styleClass="tituAdmin" value="#{temaActual.titulo}" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h:outputText value="#{temaActual.titulo}" />
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </div>
+                                <div class="col-lg-4 descCat">
+                                    <h:outputText value="#{temaActual.usuario.apodo}" />
+                                </div>
+                                <div class="col-lg-2 descCat">
+                                    <h:outputText value="#{temaActual.fechaCreacion}" />
+                                </div>
+                            </div>
+
+                            <br/>
+                        </c:if>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <p>No hay temas en esta categoria</p>
+                </c:otherwise>
+            </c:choose>
+        </ui:define>
+    </ui:composition>
+
+</html>

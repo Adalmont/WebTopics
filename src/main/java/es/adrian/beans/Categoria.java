@@ -44,12 +44,14 @@ import org.hibernate.HibernateException;
 @Entity
 @Table(name = "categorias")
 @ManagedBean(name = "categoria", eager = false)
-public class Categoria {
+@SessionScoped
+public class Categoria implements Serializable {
 
     @Id
     @JoinColumn(name = "idCategoria")
     private int idCategoria;
     private String nombre;
+    private String descripcion;
 
     public int getIdCategoria() {
         return idCategoria;
@@ -67,12 +69,21 @@ public class Categoria {
         this.nombre = nombre;
     }
 
+    public String getDescripcion(){
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion){
+        this.descripcion=descripcion;
+    }
+
     /**
      * metodo que reinicia los parametros del bean
      */
     public void limpiarDatos() {
         this.idCategoria = 0;
         this.nombre = null;
+        this.descripcion = null;
     }
 
     /**
@@ -128,5 +139,7 @@ public class Categoria {
             return "false";
         }
     }
+
+
 
 }
