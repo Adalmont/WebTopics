@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
@@ -54,6 +55,7 @@ public class Tema implements Serializable {
     private int idTema;
     @ManyToOne
     @JoinColumn(name = "idUsuario")
+    @ManagedProperty(value = "#{usuario}")
     private Usuario usuario;
     @ManyToOne
     @JoinColumn(name = "idCategoria")
@@ -65,8 +67,8 @@ public class Tema implements Serializable {
     private String estado;
     @Transient
     private String mensaje;
-    @Transient
-    private Categoria catElegida;
+    /*@Transient
+    private Categoria catElegida;*/
 
     public int getIdTema() {
         return idTema;
@@ -132,22 +134,26 @@ public class Tema implements Serializable {
         this.mensaje = mensaje;
     }
 
-    public Categoria getCatElegida() {
+    /*public Categoria getCatElegida() {
         return catElegida;
     }
 
     public void setCatElegida(Categoria catElegida) {
         this.catElegida = catElegida;
-    }
+    }*/
 
     
     /**
      * metodo para reiniciar los datos del bean
+     * 
+     * @param cat parametro para indicar si se ha elegido una categoria
      */
-    public void limpiarDatos() {
+    public void limpiarDatos(String cat) {
         this.idTema = 0;
         this.usuario = null;
+        if (cat==null){
         this.categoria = null;
+        }
         this.titulo = null;
         this.fechaCreacion = null;
         this.mensajeInicial = null;
@@ -166,19 +172,18 @@ public class Tema implements Serializable {
             gdao.add(this);
             return "true";
         } catch (HibernateException | NullPointerException e) {
-            limpiarDatos();
+            limpiarDatos(null);
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
             return "false";
         }
     }
 
     /**
-     * metodo para obtener una lista de temas segun la condicion que se le pase
+     * metodo para eliminar un tema de la base de datos
      *
-     * @return lista de temas
+     * @return true si se elimina con exito, false si hay un error
      */
    
-
     public String deleteTema() {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
@@ -186,11 +191,17 @@ public class Tema implements Serializable {
             gdao.delete(this);
             return "true";
         } catch (HibernateException | NullPointerException e) {
-            limpiarDatos();
+            limpiarDatos(null);
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
             return "false";
         }
     }
+
+    /**
+    * metodo para que un moderador cierre un tema
+    * 
+    * @return true si se realiza la operacion con exito, false si hay un error
+    */
 
     public String cerrarTema() {
         try {
@@ -200,36 +211,68 @@ public class Tema implements Serializable {
             gdao.update(this);
             return "true";
         } catch (HibernateException | NullPointerException e) {
-            limpiarDatos();
+            limpiarDatos(null);
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
             return "false";
         }
     }
     
-    
+    /**metodo para elegir la categoria de la que se quiere obtener la lista de temas
+     * 
+     * @param categoriaElegida la categoria seleccionada
+     * 
+     * @return true si la categoria elegida es valida y no ha habido errores, false en cualquier otro caso
+      */
+
     public String elegirCat(Categoria categoriaElegida) {
         if (categoriaElegida != null) {
-            this.catElegida = categoriaElegida;
+            this.categoria = categoriaElegida;
             return "true";
         } else {
             return "false";
         }
     }
     
+    /**metodo para obtener una lista de temas en base a una categoria
+     * 
+     * @return lista de temas
+     */
+
     public ArrayList<Tema> getTemas() {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
             ArrayList<Tema> listaTemas = null;
-            System.out.print ("ESTACATEGORIA: "+this.catElegida.getIdCategoria());
-            if (this.catElegida.getIdCategoria()!=0){
-                listaTemas = (ArrayList<Tema>) gdao.get("Tema where idCategoria = "+this.catElegida.getIdCategoria());
+            System.out.print ("ESTACATEGORIA: "+this.categoria.getIdCategoria());
+            if (this.categoria.getIdCategoria()!=0){
+                listaTemas = (ArrayList<Tema>) gdao.get("Tema where idCategoria = "+this.categoria.getIdCategoria());
             }
             return listaTemas;
         } catch (HibernateException | NullPointerException e) {
-            limpiarDatos();
+            limpiarDatos(null);
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
             return null;
+        }
+    }
+
+    /**metodo para elegir un tema de la lista y mostrar su pagina individual
+     * 
+     * @param temaElegido tema elegido para mostrar
+     * 
+     * @return true si la operacion es exitosa, false si se produce un error
+     */
+    public String elegirTema(Tema temaElegido){
+        if (temaElegido!=null){
+            this.idTema = temaElegido.getIdTema();
+            this.usuario = temaElegido.getUsuario();
+            this.categoria = temaElegido.getCategoria();
+            this.titulo = temaElegido.getTitulo();
+            this.fechaCreacion = temaElegido.getFechaCreacion();
+            this.mensajeInicial = temaElegido.getMensajeInicial();
+            this.estado = temaElegido.getEstado();
+            return "true";
+        }else{
+            return "false";
         }
     }
 }

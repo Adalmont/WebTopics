@@ -160,19 +160,45 @@ public class Mensaje implements Serializable {
     /**
      * metodo para obtener la lista de mensajes de un tema
      *
-     * @param tema tema al que pertenecen los mensajes
+     * @param Idtema tema al que pertenecen los mensajes
      * @return lista de mensajes
      */
-    public ArrayList<Mensaje> getMensajes(String tema) {
+    public ArrayList<Mensaje> getMensajes(int Idtema) {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
-            ArrayList<Mensaje> listaMensajes = (ArrayList<Mensaje>) gdao.get("Mensaje where idTema=" + tema);
+            ArrayList<Mensaje> listaMensajes = (ArrayList<Mensaje>) gdao.get("Mensaje where idTema=" + Idtema);
             return listaMensajes;
         } catch (HibernateException | NullPointerException e) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
             limpiarDatos();
             return null;
+        }
+    }
+
+    /**
+     * metodo para cambiar el contenido de un mensaje informando de que el usuario o el administrador
+     * lo han borrado
+     * 
+     * @param tipoUsuario tipo del usuario que borra el mensaje
+     * @return true si la operacion es exitosa, false si se produce un error
+     */
+    public String borrarMensaje(String tipoUsuario){
+        try {
+            DAOFactory daof = DAOFactory.getDAOFactory();
+            IGenericoDAO gdao = daof.getGenericoDAO();
+            if (tipoUsuario.equals("m") || tipoUsuario.equals("a")){
+                this.contenido = "Este mensaje ha sido eliminado por un moderador";
+            }
+            if (tipoUsuario.equals("n")){
+                this.contenido = "Este mensaje ha sido eliminado por el usuario";
+            }
+            gdao.update(this);
+            return "true";
+        } catch (HibernateException | NullPointerException e) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
+            limpiarDatos();
+            return "false";
         }
     }
 }

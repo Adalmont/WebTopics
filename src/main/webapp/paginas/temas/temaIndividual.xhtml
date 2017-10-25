@@ -35,71 +35,59 @@
                 <h1 class="centrar colorAzul">Mensajes</h1>
                 <div class="col-lg-12">
                     <div class="col-lg-2">
-                            <c:choose>
-                                    <c:when test="#{tema.usuario.avatar==null}">
-                                        <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/desconocido.jpg"
-                                            height="120" width="120" /><br/>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/#{tema.usuario.avatar}"
-                                            height="120" width="120" /><br/>
-                                    </c:otherwise>
-                                </c:choose>
+                        <c:choose>
+                            <c:when test="#{tema.usuario.avatar==null}">
+                                <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/desconocido.jpg"
+                                    height="120" width="120" /><br/>
+                            </c:when>
+                            <c:otherwise>
+                                <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/#{tema.usuario.avatar}"
+                                    height="120" width="120" /><br/>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                     <div class=col-lg-10>
                         <p>#{tema.mensajeInicial}</p>
                     </div>
                 </div>
-                <!--<c:forEach var="mensajeActual" items="#{mensaje.getMensajes(oferta.idOferta)}">
-                    <c:if test="#{mensajeActual.oferta.idOferta==oferta.idOferta}">
-                        <c:if test="#{mensajeActual.tipo eq 'pri' and (usuario.idUsuario == mensajeActual.usuario.idUsuario or oferta.usuario.idUsuario == usuario.idUsuario or usuario.tipo eq 'a')}">
-                            <h:panelGrid class="centrarTabla" columns="2" border="0" cellspacing="2">
-                                <h:outputLabel value="Autor: " />
-                                <h:outputText class="centrar colorFondoAzul" value="#{mensajeActual.usuario.nombre} #{mensajeActual.usuario.apellidos}" />
-                                <h:outputLabel value="Asunto: " />
-                                <h:outputText class="centrar" value="#{mensajeActual.asunto}" />
-                                <h:outputLabel value="Contenido: " />
-                                <h:outputText value=" #{mensajeActual.contenido}" />
-                            </h:panelGrid>
-                            <br/>
-                        </c:if>
-                        <c:if test="#{mensajeActual.tipo eq 'pu'}">
-                            <h:panelGrid class="centrarTabla" columns="2" border="0" cellspacing="2">
-                                <h:outputLabel value="Autor: " />
-                                <h:outputText class="centrar" value="#{mensajeActual.usuario.nombre} #{mensajeActual.usuario.apellidos}" />
-                                <h:outputLabel value="Asunto: " />
-                                <h:outputText class="centrar" value="#{mensajeActual.asunto}" />
-                                <h:outputLabel value="Contenido: " />
-                                <h:outputText value=" #{mensajeActual.contenido}" />
-                            </h:panelGrid>
-                            <br/>
-                        </c:if>
-                        <c:if test="#{usuario.tipo eq 'a'}">
-                            <h:form>
-                                <h:commandButton class="btn btn-primary centrarTabla" value="Borrar Mensaje" action="#{mensajeActual.deleteMensaje()}" />
-                            </h:form>
-                        </c:if>
+                <c:forEach var="mensajeActual" items="#{mensaje.getMensajes(tema.idTema)}">
+                    <div class="col-lg-12">
+                        <div class="col-lg-2">
+                            <c:choose>
+                                <c:when test="#{mensajeActual.usuario.avatar==null}">
+                                    <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/desconocido.jpg"
+                                        height="120" width="120" /><br/>
+                                </c:when>
+                                <c:otherwise>
+                                    <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/#{mensajeActual.usuario.avatar}"
+                                        height="120" width="120" /><br/>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                        <div class=col-lg-12>
+                            <p>#{mensajeActual.contenido}</p>
+                        </div>
+                    </div>
+                    <c:if test="#{usuario.tipo eq 'a' or usuario.idUsuario == mensajeActual.usuario.idUsuario}">
+                        <h:form>
+                            <h:commandButton class="btn btn-primary centrarTabla" value="Borrar Mensaje" action="#{mensajeActual.borrarMensaje(usuario.tipo)}"
+                            />
+                        </h:form>
                     </c:if>
                 </c:forEach>
                 <div id="crearMensaje" class="col-lg-12 centrar hidden">
                     <br/>
                     <h:form id="formulario" class="centrar">
                         <h:panelGrid columns="2" border="0" cellspacing="2" class="centrarFormMensaje">
-                            <h:outputLabel value="Asunto: " />
-                            <h:inputText value="#{mensaje.asunto}" pt:placeholder="Asunto" pt:required="true" />
-                            <h:outputLabel value="Contenido: " />
+                            <h:outputLabel value="Escribe tu mensaje: " />
                             <h:inputTextarea value="#{mensaje.contenido}" pt:required="true" />
-                            <h:selectOneRadio value="#{mensaje.tipo}">
-                                <f:selectItem itemValue="pu" itemLabel="Publico" />
-                                <f:selectItem itemValue="pri" itemLabel="Privado" />
-                            </h:selectOneRadio>
-                            <h:commandButton class="centrarTabla" value="Crear Mensaje" action="#{mensaje.addMensaje(usuario)}" />
+                            <h:commandButton class="centrarTabla" value="Enviar Mensaje" action="#{mensaje.addMensaje()}" />
                         </h:panelGrid>
                     </h:form>
                 </div>
                 <c:if test="#{usuario.idUsuario!=oferta.usuario.idUsuario}">
                     <div class="col-lg-12">
-                        <button class="btn btn-primary centrarTabla" id="botonMensaje">Añadir Mensaje</button>
+                        <button class="btn btn-primary centrarTabla" id="botonMensaje">Crear Mensaje</button>
                     </div>
                 </c:if>
 
