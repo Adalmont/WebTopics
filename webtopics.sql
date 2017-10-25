@@ -13,7 +13,7 @@
 
 
 -- Volcando estructura de base de datos para webtopics
-CREATE DATABASE IF NOT EXISTS `webtopics`  DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `webtopics` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `webtopics`;
 
 -- Volcando estructura para tabla webtopics.amigos
