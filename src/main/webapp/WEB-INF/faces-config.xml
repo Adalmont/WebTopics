@@ -10,6 +10,11 @@
             <from-action>volver</from-action>
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{tema.elegirCat(categoriaActual)}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 
     <navigation-rule>
@@ -56,23 +61,68 @@
             <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-    
-    <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
-        <navigation-case>
-            <from-action>#{tema.elegirCat(categoriaActual)}</from-action>
-            <from-outcome>true</from-outcome>
-            <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
 
     <navigation-rule>
         <from-view-id>/paginas/temas/listaTemas.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{temaActual.elegirTema(temaActual)</from-action>
+            <from-action>#{tema.elegirTema(temaActual)}</from-action>
             <from-outcome>true</from-outcome>
             <to-view-id>/paginas/temas/temaIndividual.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{tema.elegirTema(temaActual)}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/paginas/temas/nuevoTema.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{tema.addTema(usuario)}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{tema.addTema(usuario)}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/paginas/temas/temaIndividual.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{mensaje.addMensaje(usuario)}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/temaIndividual.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{mensaje.addMensaje(usuario)}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{mensajeActual.borrarMensaje('e')}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/temaIndividual.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{mensajeActual.borrarMensaje('e')}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{mensajeActual.borrarMensaje('m')}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/temaIndividual.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{mensajeActual.borrarMensaje('m')}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+        
     </navigation-rule>
 
 </faces-config>

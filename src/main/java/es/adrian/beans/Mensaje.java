@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
@@ -52,6 +53,7 @@ public class Mensaje implements Serializable {
     private int idMensaje;
     @ManyToOne
     @JoinColumn(name = "idTema")
+    @ManagedProperty(value = "#{tema}")
     private Tema tema;
     @ManyToOne
     @JoinColumn(name = "idUsuario")
@@ -114,13 +116,15 @@ public class Mensaje implements Serializable {
     /**
      * metodo para crear un nuevo mensaje en un tema
      *
+     * @param tema tema en el que se crea el mensaje
      * @return true si se crea el mensaje sin incidentes, false si surge un
      * error
      */
-    public String addMensaje() {
+    public String addMensaje(Usuario usuario) {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
+            this.usuario= usuario;
             gdao.add(this);
             limpiarDatos();
             return "true";
@@ -142,10 +146,10 @@ public class Mensaje implements Serializable {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
-            if (!categoria.equals("m") || !categoria.equals("a")) {
-                this.contenido = "Este mensaje ha sido eliminado por el usuario";
-            } else {
+            if (categoria.equals("m") || categoria.equals("a")) {
                 this.contenido = "Este mensaje ha sido eliminado por un moderador";
+            } else {
+                this.contenido = "Este mensaje ha sido eliminado por el usuario";
             }
             gdao.update(this);
             limpiarDatos();

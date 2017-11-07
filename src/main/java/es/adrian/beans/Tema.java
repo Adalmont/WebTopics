@@ -47,6 +47,7 @@ import org.hibernate.HibernateException;
 @Entity
 @Table(name = "temas")
 @ManagedBean(name = "tema", eager = false)
+@SessionScoped
 public class Tema implements Serializable {
 
     @Id
@@ -55,10 +56,10 @@ public class Tema implements Serializable {
     private int idTema;
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    @ManagedProperty(value = "#{usuario}")
     private Usuario usuario;
     @ManyToOne
     @JoinColumn(name = "idCategoria")
+    @ManagedProperty(value = "#{categoria}")
     private Categoria categoria;
     private String titulo;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -67,6 +68,7 @@ public class Tema implements Serializable {
     private String estado;
     @Transient
     private String mensaje;
+
     /*@Transient
     private Categoria catElegida;*/
 
@@ -141,18 +143,17 @@ public class Tema implements Serializable {
     public void setCatElegida(Categoria catElegida) {
         this.catElegida = catElegida;
     }*/
-
-    
     /**
      * metodo para reiniciar los datos del bean
-     * 
+     *
      * @param cat parametro para indicar si se ha elegido una categoria
      */
     public void limpiarDatos(String cat) {
         this.idTema = 0;
         this.usuario = null;
-        if (cat==null){
-        this.categoria = null;
+        this.estado=null;
+        if (cat == null) {
+            this.categoria = null;
         }
         this.titulo = null;
         this.fechaCreacion = null;
@@ -165,10 +166,14 @@ public class Tema implements Serializable {
      * @return true si se lleva a cabo la operacion sin ningun error, false si
      * se produce alguno
      */
-    public String addTema() {
+    public String addTema(Usuario usuario) {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
+            this.usuario = usuario;
+            System.out.println("TEMAUSUARIO"+this.usuario.getIdUsuario());
+            System.out.println("TEMACATEGORIA"+this.categoria.getIdCategoria()+this.usuario.getIdUsuario());
+            this.estado="a";
             gdao.add(this);
             return "true";
         } catch (HibernateException | NullPointerException e) {
@@ -183,7 +188,6 @@ public class Tema implements Serializable {
      *
      * @return true si se elimina con exito, false si hay un error
      */
-   
     public String deleteTema() {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
@@ -198,11 +202,10 @@ public class Tema implements Serializable {
     }
 
     /**
-    * metodo para que un moderador cierre un tema
-    * 
-    * @return true si se realiza la operacion con exito, false si hay un error
-    */
-
+     * metodo para que un moderador cierre un tema
+     *
+     * @return true si se realiza la operacion con exito, false si hay un error
+     */
     public String cerrarTema() {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
@@ -216,14 +219,16 @@ public class Tema implements Serializable {
             return "false";
         }
     }
-    
-    /**metodo para elegir la categoria de la que se quiere obtener la lista de temas
-     * 
-     * @param categoriaElegida la categoria seleccionada
-     * 
-     * @return true si la categoria elegida es valida y no ha habido errores, false en cualquier otro caso
-      */
 
+    /**
+     * metodo para elegir la categoria de la que se quiere obtener la lista de
+     * temas
+     *
+     * @param categoriaElegida la categoria seleccionada
+     *
+     * @return true si la categoria elegida es valida y no ha habido errores,
+     * false en cualquier otro caso
+     */
     public String elegirCat(Categoria categoriaElegida) {
         if (categoriaElegida != null) {
             this.categoria = categoriaElegida;
@@ -232,20 +237,21 @@ public class Tema implements Serializable {
             return "false";
         }
     }
-    
-    /**metodo para obtener una lista de temas en base a una categoria
-     * 
+
+    /**
+     * metodo para obtener una lista de temas en base a una categoria
+     *
      * @return lista de temas
      */
-
     public ArrayList<Tema> getTemas() {
         try {
+            System.out.print("ENTRANDOENGETTEMAS");
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
             ArrayList<Tema> listaTemas = null;
-            System.out.print ("ESTACATEGORIA: "+this.categoria.getIdCategoria());
-            if (this.categoria.getIdCategoria()!=0){
-                listaTemas = (ArrayList<Tema>) gdao.get("Tema where idCategoria = "+this.categoria.getIdCategoria());
+            System.out.print("ESTACATEGORIA: " + this.categoria.getIdCategoria());
+            if (this.categoria.getIdCategoria() != 0) {
+                listaTemas = (ArrayList<Tema>) gdao.get("Tema where idCategoria = " + this.categoria.getIdCategoria());
             }
             return listaTemas;
         } catch (HibernateException | NullPointerException e) {
@@ -255,14 +261,16 @@ public class Tema implements Serializable {
         }
     }
 
-    /**metodo para elegir un tema de la lista y mostrar su pagina individual
-     * 
+    /**
+     * metodo para elegir un tema de la lista y mostrar su pagina individual
+     *
      * @param temaElegido tema elegido para mostrar
-     * 
+     *
      * @return true si la operacion es exitosa, false si se produce un error
      */
-    public String elegirTema(Tema temaElegido){
-        if (temaElegido!=null){
+    public String elegirTema(Tema temaElegido) {
+        try {
+            System.out.print("METODOMEDIO: " + temaElegido.getTitulo());
             this.idTema = temaElegido.getIdTema();
             this.usuario = temaElegido.getUsuario();
             this.categoria = temaElegido.getCategoria();
@@ -270,8 +278,10 @@ public class Tema implements Serializable {
             this.fechaCreacion = temaElegido.getFechaCreacion();
             this.mensajeInicial = temaElegido.getMensajeInicial();
             this.estado = temaElegido.getEstado();
+            System.out.print("METODOFIN: " + temaElegido.getTitulo());
             return "true";
-        }else{
+        } catch (NullPointerException e) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
             return "false";
         }
     }

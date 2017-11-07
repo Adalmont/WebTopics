@@ -16,15 +16,14 @@
     <ui:composition template="/resources/plantilla/plantilla.xhtml">
         <ui:define name="contenido">
             <f:event type="preRenderView" listener="#{tema.limpiarDatos('c')}"/>
-            <h:form id="formulario" class="centrar" enctype="multipart/form-data">
-            <h:outputText class="centrar mensajeOferta colorAzulOscuro" value="#{oferta.mensaje}"/>
+            <h:form id="formulario" class="centrar">
             <h:panelGrid columns="2" border="0" cellspacing="2" class="centrarTabla" >
                 <h:outputLabel value="Titulo: "/>
                 <h:inputText value="#{tema.titulo}" pt:placeholder="Titulo del tema" pt:required="true"/>
                 <h:outputLabel value="Mensaje inicial: "/>
                 <h:inputTextarea value="#{tema.mensajeInicial}" pt:placeholder="Mensaje Inicial del tema" pt:required="true"/>
             </h:panelGrid>
-            <h:commandButton class="btn btn-primary" value="Aceptar" action="#{tema.addTema()}"/>
+                <h:commandButton class="btn btn-primary" value="Aceptar" action="#{tema.addTema(usuario)}"/>
             <br/>
         </h:form>
         <h:link class="btn btn-primary" value="Volver" outcome="/index.xhtml"/>
