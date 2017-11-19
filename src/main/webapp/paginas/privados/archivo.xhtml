@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions">
+    <h:head>
+        <title>Facelet Title</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <h:outputStylesheet library="css" name="estilos.css"/>    
+    </h:head>
+    <h:body>
+
+        <ui:composition template="/resources/plantilla/plantilla.xhtml">
+            <ui:define name="contenido">
+                    <div class="col-lg-12 centrar">
+                            <h:link outcome="/paginas/perfil/perfil.xhtml" value="Volver" styleClass="btn btn-primary" />
+                        </div>
+                        <c:choose>
+                            <c:when test="#{privado.privadosArchivados(usuario.idUsuario)==true}">
+                                <c:forEach var="mensActual" items="#{privado.privados}">
+                                    <c:if test="#{mensActual.receptor.idUsuario eq usuario.idUsuario and mensActual.leido eq 'l'}">
+                                        <div class="col-lg-12" style="border:solid;">
+                                            <div class="col-lg-1" style="border-right: solid;">
+                                                <c:choose>
+                                                    <c:when test="#{mensActual.creador.avatar==null}">
+                                                        <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/desconocido.jpg"
+                                                            height="40" width="40" /><br/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/#{mensajeActual.usuario.avatar}"
+                                                            height="40" width="40" /><br/>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <br/>
+                                                <h:outputText value="#{mensActual.creador.apodo}" />
+                                            </div>
+                                            <div class="col-lg-10">
+                                                <p>#{mensActual.titulo}</p>
+                                            </div>
+            
+                                            <div class="col-lg-1" style="border-left:solid">
+                                                <h:outputText value="#{mensActual.fechaCreacion}" />
+                                            </div>
+                                            <div class=col-lg-1></div>
+                                            <div class="col-lg-10">
+                                                <p>#{mensActual.contenido}</p>
+                                            </div>
+                                            <div class=col-lg-1></div>
+                                        </div>
+                                    </c:if>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <p>No hay mensajes archivados</p>
+                            </c:otherwise>
+                        </c:choose>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
