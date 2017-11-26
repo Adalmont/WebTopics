@@ -18,7 +18,7 @@
                     <h1 style="font-size: 18px">Bienvenido a Webtopics</h1>
                     <p>Elija una categoria</p>
                     <c:forEach var="categoriaActual" items="#{categoria.categorias}">
-                        <div class="col-lg-4 centrar">
+                        <div class="col-lg-12 centrar">
                             <h:form>
                             <h3><h:commandLink value="#{categoriaActual.nombre}" action="#{tema.elegirCat(categoriaActual)}"/></h3>
                             </h:form>

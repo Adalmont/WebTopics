@@ -37,6 +37,9 @@
 .centrarImg{
     margin-left: 45%;
 }
+.centrar48{
+    margin-left: 48%;
+}
 .botonesCabecera{
     margin-top: 10%;
 }
@@ -71,4 +74,14 @@
 }
 .tituAdmin{
     color: firebrick;
+}
+.body {
+  min-height: 100vh;
+  position: relative;
+  margin: 0;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
 }

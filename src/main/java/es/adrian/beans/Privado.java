@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
@@ -61,7 +62,7 @@ public class Privado implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaCreacion;
     @Transient
-    private int numeroMensajes;
+    private String busqueda;
 
     public int getIdPrivado() {
         return idPrivado;
@@ -118,15 +119,14 @@ public class Privado implements Serializable {
     public void setFechaCreacion(Date fechaCreacion){
         this.fechaCreacion = fechaCreacion;
     }
-
-    public int getNumeroMensajes(){
-        return numeroMensajes;
-    }
-
-    public void setNumeroMensajes(int numeroMensajes){
-        this.numeroMensajes=numeroMensajes;
-    }
     
+    public String getBusqueda(){
+        return busqueda;
+    }
+
+    public void setBusqueda(String busqueda){
+        this.busqueda=busqueda;
+    }
 
     public void limpiarDatos() {
         this.idPrivado=0;
@@ -152,12 +152,12 @@ public class Privado implements Serializable {
 
     }
 
-    public String addPrivado(Usuario receptor){
+    public String addPrivado(Usuario creador){
         try{                                                                      
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
+            this.creador = creador;
             this.leido="n";
-            this.receptor=receptor;
             gdao.add(this);
             return "true";
 
@@ -180,66 +180,22 @@ public class Privado implements Serializable {
         }
     }
 
-    public ArrayList<Privado> getPrivados(){
+    public String elegirDestinatario(Usuario usuario){
+        this.receptor = usuario;
+        System.out.println(this.receptor.getApodo());
+        return "true";
+    }
+
+    public ArrayList<Usuario> getUsuariosBusqueda() {
+        
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
-            ArrayList<Privado> listaPrivados = (ArrayList<Privado>) gdao.get("Privado");
-            return listaPrivados;
-        } catch (HibernateException | NullPointerException e) {
-            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
-            limpiarDatos();
+            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) gdao.get("Usuario where apodo LIKE '"+this.busqueda+"%'");
+            return listaUsuarios;
+        } catch (NullPointerException | HibernateException he) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, he);
             return null;
-        }
-    }
-
-    public boolean privadosPendientes(int receptor) {
-        try {
-            DAOFactory daof = DAOFactory.getDAOFactory();
-            IGenericoDAO gdao = daof.getGenericoDAO();
-            ArrayList<Privado> listaPrivados = (ArrayList<Privado>) gdao.get("Privado where idReceptor=" + receptor + " and leido='n'");
-            if (!listaPrivados.isEmpty()) {
-                this.numeroMensajes = listaPrivados.size();
-                return true;
-            } else {
-                return false;
-            }
-        } catch (HibernateException he) {
-            Logger.getLogger(Privado.class.getName()).log(Level.SEVERE, null, he);
-            return false;
-        }
-    }
-
-    public boolean privadosArchivados(int receptor) {
-        try {
-            DAOFactory daof = DAOFactory.getDAOFactory();
-            IGenericoDAO gdao = daof.getGenericoDAO();
-            ArrayList<Privado> listaPrivados = (ArrayList<Privado>) gdao.get("Privado where idReceptor=" + receptor + " and leido='l'");
-            if (!listaPrivados.isEmpty()) {
-                this.numeroMensajes = listaPrivados.size();
-                return true;
-            } else {
-                return false;
-            }
-        } catch (HibernateException he) {
-            Logger.getLogger(Privado.class.getName()).log(Level.SEVERE, null, he);
-            return false;
-        }
-    }
-
-    public String leerMensajes(int receptor){
-        try {
-            DAOFactory daof = DAOFactory.getDAOFactory();
-            IGenericoDAO gdao = daof.getGenericoDAO();
-            ArrayList<Privado> listaNoLeidos = (ArrayList<Privado>) gdao.get("Privado where idReceptor = "+ receptor + " and leido = 'n'");
-            for (Privado i : listaNoLeidos){
-                i.setLeido("l");
-                gdao.update(i);
-            }
-            return "true";
-        } catch (HibernateException he) {
-            Logger.getLogger(Privado.class.getName()).log(Level.SEVERE, null, he);
-            return "false";
         }
     }
 }   

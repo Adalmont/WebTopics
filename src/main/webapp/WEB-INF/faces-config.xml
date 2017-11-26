@@ -3,7 +3,7 @@
               xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
-
+    <!--PERFIL -->
     <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
@@ -16,7 +16,7 @@
             <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-
+    <!--REGISTRO -->
     <navigation-rule>
         <from-view-id>/paginas/registro-login/registro.xhtml</from-view-id>
         <navigation-case>
@@ -34,7 +34,7 @@
             <to-view-id>/paginas/registro-login/registro.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-
+    <!--LOGIN -->
     <navigation-rule>
         <from-view-id>/paginas/registro-login/login.xhtml</from-view-id>
         <navigation-case>
@@ -52,7 +52,7 @@
             <to-view-id>/paginas/registro-login/login.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-
+    <!--LISTA DE CATEGORIAS -->
     <navigation-rule>
         <from-view-id>/paginas/categorias/listaCategorias.xhtml</from-view-id>
         <navigation-case>
@@ -61,7 +61,7 @@
             <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-
+    <!--LISTA DE TEMAS -->
     <navigation-rule>
         <from-view-id>/paginas/temas/listaTemas.xhtml</from-view-id>
         <navigation-case>
@@ -75,7 +75,7 @@
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-    
+    <!--CREAR TEMA -->
     <navigation-rule>
         <from-view-id>/paginas/temas/nuevoTema.xhtml</from-view-id>
         <navigation-case>
@@ -89,7 +89,7 @@
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-    
+    <!--TEMA INDIVIDUAL -->
     <navigation-rule>
         <from-view-id>/paginas/temas/temaIndividual.xhtml</from-view-id>
         <navigation-case>
@@ -122,7 +122,45 @@
             <from-outcome>false</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
-        
     </navigation-rule>
-
+    <!--BUSCADOR RECEPTOR -->
+    <navigation-rule>
+        <from-view-id>/paginas/privados/elegirReceptor.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>buscar</from-action>
+            <to-view-id>/paginas/privados/elegirReceptor.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{privado.elegirDestinatario(usuarioActual)}</from-action>
+            <to-view-id>/paginas/privados/nuevoPrivado.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <!--NUEVO PRIVADO -->
+    <navigation-rule>
+        <from-view-id>/paginas/privados/nuevoPrivado.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{privado.addPrivado(usuario)}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/perfil/perfil.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{privado.addPrivado(usuario)}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/paginas/privados/nuevoPrivado.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <!--VER PRIVADOS -->
+    <navigation-rule>
+        <from-view-id>/paginas/privados/verPrivados.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{usuario.leerMensajes()}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/perfil/perfil.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{usuario.leerMensajes()}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/paginas/privados/verPrivados.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>
