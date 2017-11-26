@@ -89,11 +89,14 @@ CREATE TABLE IF NOT EXISTS `privados` (
   KEY `FK_privado-receptor` (`idReceptor`),
   CONSTRAINT `FK_privado-creador` FOREIGN KEY (`idCreador`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_privado-receptor` FOREIGN KEY (`idReceptor`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla webtopics.privados: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla webtopics.privados: ~1 rows (aproximadamente)
 DELETE FROM `privados`;
 /*!40000 ALTER TABLE `privados` DISABLE KEYS */;
+INSERT INTO `privados` (`idPrivado`, `idCreador`, `idReceptor`, `titulo`, `contenido`, `fechaCreacion`, `leido`) VALUES
+	(1, 3, 4, 'mensaje', 'mesnaje', '2017-11-26 00:00:00', 's'),
+	(2, 3, 4, 'df', 'fdfddff', '2017-11-26 00:00:00', 's');
 /*!40000 ALTER TABLE `privados` ENABLE KEYS */;
 
 -- Volcando estructura para tabla webtopics.temas
