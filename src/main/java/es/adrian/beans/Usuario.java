@@ -299,7 +299,7 @@ public class Usuario implements Serializable {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
-            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) gdao.get("Usuario where tipo='n' or tipo='b'");
+            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) gdao.get("Usuario where tipo='e' or tipo='b' or tipo='m'");
             return listaUsuarios;
         } catch (HibernateException he) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, he);
@@ -325,7 +325,7 @@ public class Usuario implements Serializable {
                 gdao.update(usuario);
             }
             if (bloquear.equals("desbloquear")) {
-                usuario.tipo = "n";
+                usuario.tipo = "e";
                 gdao.update(usuario);
             }
             return "true";
@@ -334,7 +334,11 @@ public class Usuario implements Serializable {
             return "false";
         }
     }
-
+    
+    /**
+     * Metodo para comprobar si el usuario tiene mensajes privados sin leer
+     * @return true si hay mensajes sin leer, false si no
+     */
     public boolean privadosPendientes() {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
@@ -350,7 +354,10 @@ public class Usuario implements Serializable {
             return false;
         }
     }
-
+    /**
+     * Metodo para comprobar si el usuario tiene mensajes archivados
+     * @return true si hay mensajes archivados, false si no
+     */
     public boolean privadosArchivados() {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
@@ -366,7 +373,11 @@ public class Usuario implements Serializable {
             return false;
         }
     }
-
+    
+    /**
+     * Metodo para archivar todos los mensajes sin leer
+     * @return true si se realiza la operacion correctamente, false si hay errores
+     */
     public String leerMensajes(){
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
@@ -382,7 +393,11 @@ public class Usuario implements Serializable {
             return "false";
         }
     }
-
+    
+    /**
+     * Metodo para obtener los mensajes privados que recibe un usuario
+     * @return lista de mensajes
+     */
     public ArrayList<Privado> getPrivados(){
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();

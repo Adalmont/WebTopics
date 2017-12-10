@@ -69,9 +69,6 @@ public class Tema implements Serializable {
     @Transient
     private String mensaje;
 
-    /*@Transient
-    private Categoria catElegida;*/
-
     public int getIdTema() {
         return idTema;
     }
@@ -136,13 +133,6 @@ public class Tema implements Serializable {
         this.mensaje = mensaje;
     }
 
-    /*public Categoria getCatElegida() {
-        return catElegida;
-    }
-
-    public void setCatElegida(Categoria catElegida) {
-        this.catElegida = catElegida;
-    }*/
     /**
      * metodo para reiniciar los datos del bean
      *
@@ -163,6 +153,7 @@ public class Tema implements Serializable {
     /**
      * metodo para añadir un nuevo tema a la base de datos
      *
+     * @param usuario creador del tema
      * @return true si se lleva a cabo la operacion sin ningun error, false si
      * se produce alguno
      */
@@ -171,8 +162,6 @@ public class Tema implements Serializable {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
             this.usuario = usuario;
-            System.out.println("TEMAUSUARIO"+this.usuario.getIdUsuario());
-            System.out.println("TEMACATEGORIA"+this.categoria.getIdCategoria()+this.usuario.getIdUsuario());
             this.estado="a";
             gdao.add(this);
             return "true";
@@ -210,7 +199,7 @@ public class Tema implements Serializable {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
-            this.estado = "c";
+            this.estado = "b";
             gdao.update(this);
             return "true";
         } catch (HibernateException | NullPointerException e) {
@@ -245,11 +234,9 @@ public class Tema implements Serializable {
      */
     public ArrayList<Tema> getTemas() {
         try {
-            System.out.print("ENTRANDOENGETTEMAS");
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
             ArrayList<Tema> listaTemas = null;
-            System.out.print("ESTACATEGORIA: " + this.categoria.getIdCategoria());
             if (this.categoria.getIdCategoria() != 0) {
                 listaTemas = (ArrayList<Tema>) gdao.get("Tema where idCategoria = " + this.categoria.getIdCategoria());
             }

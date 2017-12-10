@@ -59,6 +59,13 @@
                         <div class="col-lg-4"><h:link styleClass="btn btn-primary" value="Archivo de Mensajes" outcome="/paginas/privados/archivo.xhtml"/></div>
                         <div class="col-lg-4"><h:link styleClass="btn btn-primary" value="Escribir Mensaje" outcome="/paginas/privados/elegirReceptor.xhtml"/></div>
                     </div>
+                    <c:if test="#{usuario.tipo eq 'a' or usuario.tipo eq 'm'}">
+                        <div class="row col-lg-12 centrar">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-4"><h:link styleClass="btn btn-primary" value="Usuarios" outcome="/paginas/administracion/administracionUsuarios.xhtml"/></div>
+                            <div class="col-lg-4"></div>
+                        </div>
+                    </c:if>
                 </div>
             </ui:define>
         </ui:composition>

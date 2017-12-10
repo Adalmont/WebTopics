@@ -38,14 +38,18 @@ import org.apache.commons.io.FilenameUtils;
 import org.hibernate.HibernateException;
 
 /**
+ * Clase que controla los mensajes privados en los temas
  *
  * @author Adrian
+ * @version final
+ * @since 1.8
  */
 @Entity
 @Table(name = "privados")
 @ManagedBean(name = "privado", eager = false)
 @SessionScoped
 public class Privado implements Serializable {
+
     @Id
     @Column(name = "idPrivado")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -109,64 +113,84 @@ public class Privado implements Serializable {
     }
 
     public void setLeido(String leido) {
-        this.leido=leido;
+        this.leido = leido;
     }
 
     public Date getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion){
+    public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
-    
-    public String getBusqueda(){
+
+    public String getBusqueda() {
         return busqueda;
     }
 
-    public void setBusqueda(String busqueda){
-        this.busqueda=busqueda;
+    public void setBusqueda(String busqueda) {
+        this.busqueda = busqueda;
     }
 
+    /**
+     * metodo para reiniciar los parametros del bean
+     *
+     */
     public void limpiarDatos() {
-        this.idPrivado=0;
-        this.creador=null;
-        this.receptor=null;
-        this.leido=null;
-        this.titulo=null;
-        this.contenido=null;
-        this.fechaCreacion=null;
+        this.idPrivado = 0;
+        this.creador = null;
+        this.receptor = null;
+        this.leido = null;
+        this.titulo = null;
+        this.contenido = null;
+        this.fechaCreacion = null;
     }
-
-    public String updatePrivado(){
-        try{                                                                      
+    
+    /**
+     * Metodo para actualizar un mensaje privado
+     * 
+     * @return true si se actualiza correctamente, false si hay problemas 
+     */
+    public String updatePrivado() {
+        try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
             gdao.update(this);
             return "true";
 
-        }catch (HibernateException he) {
+        } catch (HibernateException he) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, he);
             return "false";
         }
 
     }
-
-    public String addPrivado(Usuario creador){
-        try{                                                                      
+    
+    /**
+     * Metodo para añadir un mensaje privado a la base de datos
+     * 
+     * @param creador emisor del mensaje
+     * @return true si se crea el mensaje, false si hay un error
+     */
+    public String addPrivado(Usuario creador) {
+        try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
             this.creador = creador;
-            this.leido="n";
+            this.leido = "n";
             gdao.add(this);
             return "true";
 
-        }catch (HibernateException he) {
+        } catch (HibernateException he) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, he);
             return "false";
         }
     }
 
+    /**
+     * Metodo para eliminar un mensaje privado
+     * 
+     * @return true si se elimina correctamente, false si hay un error
+     */
     public String deletePrivado() {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
@@ -179,23 +203,32 @@ public class Privado implements Serializable {
             return "false";
         }
     }
-
-    public String elegirDestinatario(Usuario usuario){
+    
+    /**
+     * Metodo para elegir al receptor del mensaje
+     * @param usuario receptor del mensaje
+     * @return true
+     */
+    public String elegirDestinatario(Usuario usuario) {
         this.receptor = usuario;
         System.out.println(this.receptor.getApodo());
         return "true";
     }
 
+    /**
+     * Metodo para obtener una lista de usuarios en base a la comparacion de sus apodos con una cadena de texto
+     * @return resultados de la busqueda
+     */
     public ArrayList<Usuario> getUsuariosBusqueda() {
-        
+
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
-            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) gdao.get("Usuario where apodo LIKE '"+this.busqueda+"%'");
+            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) gdao.get("Usuario where apodo LIKE '" + this.busqueda + "%'");
             return listaUsuarios;
         } catch (NullPointerException | HibernateException he) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, he);
             return null;
         }
     }
-}   
+}

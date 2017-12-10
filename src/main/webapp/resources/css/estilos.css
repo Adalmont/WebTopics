@@ -75,6 +75,12 @@
 .tituAdmin{
     color: firebrick;
 }
+.menModerador{
+    border-color: darkgoldenrod;
+}
+.menAdmin{
+    border-color: firebrick;
+}
 .body {
   min-height: 100vh;
   position: relative;

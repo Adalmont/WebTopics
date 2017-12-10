@@ -74,6 +74,16 @@
             <from-outcome>false</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{temaActual.cerrarTema()}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/temas/listaTemas.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{temaActual.cerrarTema()}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <!--CREAR TEMA -->
     <navigation-rule>
@@ -103,22 +113,12 @@
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{mensajeActual.borrarMensaje('e')}</from-action>
+            <from-action>#{mensajeActual.borrarMensaje(usuario.tipo)}</from-action>
             <from-outcome>true</from-outcome>
             <to-view-id>/paginas/temas/temaIndividual.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{mensajeActual.borrarMensaje('e')}</from-action>
-            <from-outcome>false</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{mensajeActual.borrarMensaje('m')}</from-action>
-            <from-outcome>true</from-outcome>
-            <to-view-id>/paginas/temas/temaIndividual.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{mensajeActual.borrarMensaje('m')}</from-action>
+            <from-action>#{mensajeActual.borrarMensaje(usuario.tipo)}</from-action>
             <from-outcome>false</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
@@ -161,6 +161,30 @@
             <from-action>#{usuario.leerMensajes()}</from-action>
             <from-outcome>false</from-outcome>
             <to-view-id>/paginas/privados/verPrivados.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <!--LISTA USUARIOS -->
+    <navigation-rule>
+        <from-view-id>/paginas/administracion/administracionUsuarios.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{usuarioActual.bloquearUsuario(usuarioActual, 'bloquear')}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/administracion/administracionUsuarios.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{usuarioActual.bloquearUsuario(usuarioActual, 'bloquear')}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/paginas/administracion/administracionUsuarios.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{usuarioActual.bloquearUsuario(usuarioActual, 'desbloquear')}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/paginas/administracion/administracionUsuarios.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{usuarioActual.bloquearUsuario(usuarioActual, 'desbloquear')}</from-action>
+            <from-outcome>false</from-outcome>
+            <to-view-id>/paginas/administracion/administracionUsuarios.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

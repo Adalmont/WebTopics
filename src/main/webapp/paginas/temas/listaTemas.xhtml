@@ -11,7 +11,7 @@
     </h:head>
     <ui:composition template="/resources/plantilla/plantilla.xhtml">
         <ui:define name="contenido">
-            <f:event type="preRenderView" listener="#{tema.limpiarDatos(null)}"/>
+            <f:event type="preRenderView" listener="#{tema.limpiarDatos('k')}"/>
             <div class="col-lg-12 centrar">
                 <h2>#{categoria.nombre}</h2>
             </div>
@@ -23,61 +23,71 @@
             <c:choose>
                 <c:when test="#{not empty tema.temas}">
                     <c:forEach var="temaActual" items="#{tema.temas}">
-                        <c:if test="#{temaActual.estado !='b'}">
-                            <div class="col-lg-12">
-                                <div class="col-lg-3">
+                        <div class="col-lg-12">
+                            <div class="col-lg-2">
 
-                                </div>
-                                <div class="col-lg-8  tema">
-                                    <div class="col-lg-2 descCat centrar"  style="border-right: solid;">
-                                        <div class="col-lg-1">
-                                            <c:choose>
-                                                <c:when test="#{temaActual.usuario.avatar==null}">
-                                                    <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/desconocido.jpg"
-                                                                    height="30" width="30" /><br/>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <h:graphicImage class="centrarImg" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/#{temaActual.usuario.avatar}"
-                                                                    height="30" width="30" /><br/>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </div>
-                                        <div class="col-lg-1"  style="margin-left: 10px" >
-                                            <h:outputText value="#{temaActual.usuario.apodo}" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8">
+                            </div>
+                            <div class="col-lg-8  tema">
+                                <div class="col-lg-3 descCat" >
+                                    <div class="col-lg-1">
                                         <c:choose>
-                                            <c:when test="#{temaActual.usuario.tipo eq 'm'}">
-                                                <h:form>
-                                                    <h:commandLink styleClass="tituModerador" value="#{temaActual.titulo}" action="#{tema.elegirTema(temaActual)}" />
-                                                </h:form>
-                                            </c:when>
-
-                                            <c:when test="#{temaActual.usuario.tipo eq 'a'}">
-                                                <h:form>
-                                                    <h:commandLink styleClass="tituAdmin" value="#{temaActual.titulo}" action="#{tema.elegirTema(temaActual)}" />
-                                                </h:form>
+                                            <c:when test="#{temaActual.usuario.avatar==null}">
+                                                <h:graphicImage class="" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/desconocido.png"
+                                                                height="30" width="30" /><br/>
                                             </c:when>
                                             <c:otherwise>
-                                                <h:form>
-                                                    <h:commandLink value="#{temaActual.titulo}" action="#{tema.elegirTema(temaActual)}" />
-                                                </h:form>
+                                                <h:graphicImage class="" alt="foto de perfil" library="imagenes" value="/resources/imagenes/avatares/#{temaActual.usuario.avatar}"
+                                                                height="30" width="30" /><br/>
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
-
-                                    <div class="col-lg-2 descCat">
-                                        <h:outputText value="#{temaActual.fechaCreacion}" />
+                                    <div class="col-lg-2"  style="margin-left: 10px" >
+                                        <h:outputText value="#{temaActual.usuario.apodo}" />
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-4" style="border-left: solid;">
+                                    <c:choose>
+                                        <c:when test="#{temaActual.usuario.tipo eq 'm'}">
+                                            <h:form>
+                                                <h:commandLink styleClass="tituModerador" value="#{temaActual.titulo}" action="#{tema.elegirTema(temaActual)}" />
+                                            </h:form>
+                                        </c:when>
 
+                                        <c:when test="#{temaActual.usuario.tipo eq 'a'}">
+                                            <h:form>
+                                                <h:commandLink styleClass="tituAdmin" value="#{temaActual.titulo}" action="#{tema.elegirTema(temaActual)}" />
+                                            </h:form>
+                                        </c:when>
+                                        <c:when test="#{temaActual.estado eq 'b'}">
+                                            <h:form>
+                                                <h:commandLink styleClass="tituAdmin" value="#{temaActual.titulo}(tema cerrado)" action="#{tema.elegirTema(temaActual)}" />
+                                            </h:form>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h:form>
+                                                <h:commandLink value="#{temaActual.titulo}" action="#{tema.elegirTema(temaActual)}" />
+                                            </h:form>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
+
+                                <div class="col-lg-2 descCat">
+                                    <h:outputText value="#{temaActual.fechaCreacion}" />
+                                </div>
+                                <c:if test="#{(usuario.tipo eq 'm' or usuario.tipo eq 'a') and temaActual.estado eq 'a'}">
+                                    <div class="col-lg-1">
+                                        <h:form>
+                                            <h:commandButton class="btn btn-primary centrarTabla" value="Cerrar Tema" action="#{temaActual.cerrarTema()}"/>       
+                                        </h:form>
+                                    </div>
+                                </c:if>
                             </div>
-                            <br/>
-                            <br/>
-                        </c:if>
+                            <div class="col-lg-4">
+
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
                     </c:forEach>
                 </c:when>
                 <c:otherwise>

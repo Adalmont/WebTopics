@@ -17,16 +17,19 @@
         <ui:define name="contenido">
             <f:event type="preRenderView" listener="#{tema.limpiarDatos('c')}"/>
             <h:form id="formulario" class="centrar">
-            <h:panelGrid columns="2" border="0" cellspacing="2" class="centrarTabla" >
-                <h:outputLabel value="Titulo: "/>
-                <h:inputText value="#{tema.titulo}" pt:placeholder="Titulo del tema" pt:required="true"/>
-                <h:outputLabel value="Mensaje inicial: "/>
-                <h:inputTextarea value="#{tema.mensajeInicial}" pt:placeholder="Mensaje Inicial del tema" pt:required="true"/>
-            </h:panelGrid>
+                <h:panelGrid columns="2" border="0" cellspacing="2" class="centrarTabla" >
+                    <h:outputLabel value="Titulo: "/>
+                    <h:inputText value="#{tema.titulo}" pt:placeholder="Titulo del tema" pt:required="true"/>
+                    <h:outputLabel value="Mensaje inicial: "/>
+                    <h:inputTextarea value="#{tema.mensajeInicial}" pt:placeholder="Mensaje Inicial del tema" pt:required="true"/>
+                </h:panelGrid>
                 <h:commandButton class="btn btn-primary" value="Aceptar" action="#{tema.addTema(usuario)}"/>
-            <br/>
-        </h:form>
-        <h:link class="btn btn-primary" value="Volver" outcome="/index.xhtml"/>
+                <br/>
+            </h:form>
+
+            <div class="col-lg-12 centrar">
+                <h:link class="btn btn-primary" value="Volver" outcome="/paginas/temas/listaTemas.xhtml"/>
+            </div>
 
         </ui:define>
     </ui:composition>  

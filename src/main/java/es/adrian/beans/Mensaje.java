@@ -60,6 +60,7 @@ public class Mensaje implements Serializable {
     private Usuario usuario;
     private String fechaCreacion;
     private String contenido;
+    private String estado;
 
     public int getIdMensaje() {
         return idMensaje;
@@ -101,6 +102,14 @@ public class Mensaje implements Serializable {
         this.contenido = contenido;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     /**
      * metodo para reiniciar los parametros del bean
      *
@@ -111,12 +120,13 @@ public class Mensaje implements Serializable {
         this.usuario = null;
         this.fechaCreacion = null;
         this.contenido = null;
+        this.estado= null;
     }
 
     /**
      * metodo para crear un nuevo mensaje en un tema
      *
-     * @param tema tema en el que se crea el mensaje
+     * @param usuario usuario que crea el mensaje
      * @return true si se crea el mensaje sin incidentes, false si surge un
      * error
      */
@@ -125,6 +135,7 @@ public class Mensaje implements Serializable {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
             this.usuario= usuario;
+            this.estado= "n";
             gdao.add(this);
             limpiarDatos();
             return "true";
@@ -136,23 +147,25 @@ public class Mensaje implements Serializable {
     }
 
     /**
-     * metodo para borrar un mensaje de un tema
+     * metodo para eliminar el contenido de un mensaje del tema
      *
-     * @param categoria
+     * @param tipoUsuario parametro para saber si el mensaje lo ha eliminado el creador o un moderador
      * @return true si se realiza la operacion sin ningun problema, false si
      * surge algun error
      */
-    public String deleteMensaje(String categoria) {
+    public String borrarMensaje(String tipoUsuario){
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IGenericoDAO gdao = daof.getGenericoDAO();
-            if (categoria.equals("m") || categoria.equals("a")) {
+            if (tipoUsuario.equals("m") || tipoUsuario.equals("a")){
                 this.contenido = "Este mensaje ha sido eliminado por un moderador";
-            } else {
+                this.estado = "b";
+            }
+            if (tipoUsuario.equals("n")){
                 this.contenido = "Este mensaje ha sido eliminado por el usuario";
+                this.estado = "b";
             }
             gdao.update(this);
-            limpiarDatos();
             return "true";
         } catch (HibernateException | NullPointerException e) {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
@@ -177,32 +190,6 @@ public class Mensaje implements Serializable {
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
             limpiarDatos();
             return null;
-        }
-    }
-
-    /**
-     * metodo para cambiar el contenido de un mensaje informando de que el usuario o el administrador
-     * lo han borrado
-     * 
-     * @param tipoUsuario tipo del usuario que borra el mensaje
-     * @return true si la operacion es exitosa, false si se produce un error
-     */
-    public String borrarMensaje(String tipoUsuario){
-        try {
-            DAOFactory daof = DAOFactory.getDAOFactory();
-            IGenericoDAO gdao = daof.getGenericoDAO();
-            if (tipoUsuario.equals("m") || tipoUsuario.equals("a")){
-                this.contenido = "Este mensaje ha sido eliminado por un moderador";
-            }
-            if (tipoUsuario.equals("n")){
-                this.contenido = "Este mensaje ha sido eliminado por el usuario";
-            }
-            gdao.update(this);
-            return "true";
-        } catch (HibernateException | NullPointerException e) {
-            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, e);
-            limpiarDatos();
-            return "false";
         }
     }
 }

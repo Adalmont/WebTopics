@@ -25,7 +25,7 @@
                         <h3 id="mensaje" class="colorRojo centrar">#{usuario.mensaje}</h3>
                         <h:panelGrid columns="2" border="0" cellspacing="2" class="centrarForm">
                             <h:outputLabel value="Avatar: "/>
-                            <h:inputFile value="#{usuario.imgSubir}" class="centrarTabla"  id="iAvatar"></h:inputFile>
+                            <h:inputFile value="#{usuario.imgSubir}" class="centrarTabla"  id="iAvatar" pt:accept="image/jpg, image/png, image/jpeg"></h:inputFile>
                             <h:outputLabel value="Nombre:"/>
                             <h:inputText id="nombre" value="#{usuario.nombre}" pt:required="true" pt:placeholder="Nombre" required="true"/>
                             <h:outputLabel value="Apellidos:"/>
