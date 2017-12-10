@@ -16,29 +16,13 @@
 CREATE DATABASE IF NOT EXISTS `webtopics` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `webtopics`;
 
--- Volcando estructura para tabla webtopics.amigos
-CREATE TABLE IF NOT EXISTS `amigos` (
-  `idUsuario` int(11) NOT NULL,
-  `idAmigo` int(11) NOT NULL,
-  `estado` set('p','a') NOT NULL DEFAULT 'p',
-  PRIMARY KEY (`idUsuario`,`idAmigo`),
-  KEY `FK_amigo-amigo` (`idAmigo`),
-  CONSTRAINT `FK_amigo-amigo` FOREIGN KEY (`idAmigo`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_amigo-usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Volcando datos para la tabla webtopics.amigos: ~0 rows (aproximadamente)
-DELETE FROM `amigos`;
-/*!40000 ALTER TABLE `amigos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `amigos` ENABLE KEYS */;
-
 -- Volcando estructura para tabla webtopics.categorias
 CREATE TABLE IF NOT EXISTS `categorias` (
   `idCategoria` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) DEFAULT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idCategoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla webtopics.categorias: ~5 rows (aproximadamente)
 DELETE FROM `categorias`;
@@ -48,7 +32,8 @@ INSERT INTO `categorias` (`idCategoria`, `nombre`, `descripcion`) VALUES
 	(2, 'Deporte', 'El ultimo partido de la liga, el nuevo fichaje de tu equipo favorito, toda la actualidad deportiva'),
 	(3, 'Tecnologia', 'Desde los aparatos mas retro hasta la tecnologia mas puntera'),
 	(4, 'Entretenimiento', '¿Quien ganará los Oscar? ¿Habeis escuchado el ultimo disco de Iron Maiden?'),
-	(5, 'Miscelanea', 'Cajon desastre, todo vale');
+	(5, 'Miscelanea', 'Cajon desastre, todo vale'),
+	(6, 'Foro Moderadores', 'Foro privado para los moderadores');
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 
 -- Volcando estructura para tabla webtopics.mensajes
@@ -58,21 +43,27 @@ CREATE TABLE IF NOT EXISTS `mensajes` (
   `idUsuario` int(11) NOT NULL,
   `fechaCreacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `contenido` varchar(250) NOT NULL,
+  `estado` set('n','b') NOT NULL DEFAULT 'n',
   PRIMARY KEY (`idMensaje`),
   KEY `FK_mensaje-tema` (`idTema`),
   KEY `FK_mensaje-usuario` (`idUsuario`),
   CONSTRAINT `FK_mensaje-tema` FOREIGN KEY (`idTema`) REFERENCES `temas` (`idTema`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_mensaje-usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla webtopics.mensajes: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla webtopics.mensajes: ~8 rows (aproximadamente)
 DELETE FROM `mensajes`;
 /*!40000 ALTER TABLE `mensajes` DISABLE KEYS */;
-INSERT INTO `mensajes` (`idMensaje`, `idTema`, `idUsuario`, `fechaCreacion`, `contenido`) VALUES
-	(1, 7, 3, '2017-11-04 18:00:33', 'Mensaje de prueba'),
-	(2, 8, 3, '2017-11-07 23:06:04', 'asdasda'),
-	(3, 8, 3, '2017-11-07 23:06:12', 'dwedwedew'),
-	(4, 1, 4, '2017-11-08 19:19:09', 'Mensaje');
+INSERT INTO `mensajes` (`idMensaje`, `idTema`, `idUsuario`, `fechaCreacion`, `contenido`, `estado`) VALUES
+	(13, 12, 14, '2017-12-10 15:22:15', 'Este mensaje ha sido eliminado por un moderador', 'b'),
+	(14, 13, 11, '2017-12-10 15:40:55', 'Este mensaje ha sido eliminado por un moderador', 'b'),
+	(15, 14, 11, '2017-12-10 15:41:14', 'Este mensaje ha sido eliminado por un moderador', 'b'),
+	(16, 18, 8, '2017-12-10 15:42:26', 'Entendido', 'n'),
+	(17, 16, 8, '2017-12-10 15:43:57', 'Este foro es para discutir noticias sobre tecnologia real, no ciencia ficcion. La proxima vez crea el tema en Miscelanea, que para algo esta', 'n'),
+	(18, 18, 7, '2017-12-10 15:45:05', 'Recibido', 'n'),
+	(19, 12, 7, '2017-12-10 15:51:10', 'Aunque este sea un foro general aun debes poner algo de esfuerzo en el tema. Tema cerrado', 'n'),
+	(20, 17, 14, '2017-12-10 15:56:12', 'Seguro que ese iba como una cuba', 'n'),
+	(21, 19, 7, '2017-12-10 18:41:33', 'Un recordatorio de las normas de este foro', 'n');
 /*!40000 ALTER TABLE `mensajes` ENABLE KEYS */;
 
 -- Volcando estructura para tabla webtopics.privados
@@ -89,14 +80,11 @@ CREATE TABLE IF NOT EXISTS `privados` (
   KEY `FK_privado-receptor` (`idReceptor`),
   CONSTRAINT `FK_privado-creador` FOREIGN KEY (`idCreador`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_privado-receptor` FOREIGN KEY (`idReceptor`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla webtopics.privados: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla webtopics.privados: ~0 rows (aproximadamente)
 DELETE FROM `privados`;
 /*!40000 ALTER TABLE `privados` DISABLE KEYS */;
-INSERT INTO `privados` (`idPrivado`, `idCreador`, `idReceptor`, `titulo`, `contenido`, `fechaCreacion`, `leido`) VALUES
-	(1, 3, 4, 'mensaje', 'mesnaje', '2017-11-26 00:00:00', 's'),
-	(2, 3, 4, 'df', 'fdfddff', '2017-11-26 00:00:00', 's');
 /*!40000 ALTER TABLE `privados` ENABLE KEYS */;
 
 -- Volcando estructura para tabla webtopics.temas
@@ -106,28 +94,27 @@ CREATE TABLE IF NOT EXISTS `temas` (
   `idCategoria` int(11) NOT NULL,
   `titulo` varchar(50) NOT NULL,
   `fechaCreacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `mensajeInicial` varchar(250) NOT NULL,
+  `mensajeInicial` varchar(500) NOT NULL,
   `estado` set('b','a') NOT NULL DEFAULT 'a',
   PRIMARY KEY (`idTema`),
   KEY `FK_tema-usuario` (`idUsuario`),
   KEY `FK_tema-categoria` (`idCategoria`),
   CONSTRAINT `FK_tema-categoria` FOREIGN KEY (`idCategoria`) REFERENCES `categorias` (`idCategoria`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_tema-usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla webtopics.temas: ~9 rows (aproximadamente)
+-- Volcando datos para la tabla webtopics.temas: ~8 rows (aproximadamente)
 DELETE FROM `temas`;
 /*!40000 ALTER TABLE `temas` DISABLE KEYS */;
 INSERT INTO `temas` (`idTema`, `idUsuario`, `idCategoria`, `titulo`, `fechaCreacion`, `mensajeInicial`, `estado`) VALUES
-	(1, 3, 1, 'prueba Actualidad', '2017-10-09 23:25:59', 'prueba de tema', 'a'),
-	(2, 3, 2, ' prueba Deporte', '2017-10-09 23:26:20', 'prueba de tema', 'a'),
-	(3, 3, 3, 'prueba Tecnologia', '2017-10-09 23:26:36', 'prueba de tema', 'a'),
-	(4, 3, 4, 'prueba Entretenimiento', '2017-10-09 23:26:51', 'prueba de tema', 'a'),
-	(5, 3, 5, 'prueba Miscelanea', '2017-10-09 23:27:06', 'prueba de tema', 'a'),
-	(6, 3, 1, 'zczxczc', '2017-11-03 18:25:33', 'xczczxcz', 'a'),
-	(7, 3, 4, 'Prueba de Tema Larga', '2017-11-04 18:00:14', 'Esta es una prueba de como se deberia de ver un tea bien construido', 'a'),
-	(8, 3, 1, 'wdew', '2017-11-07 22:57:23', 'ewdwed', 'a'),
-	(9, 4, 1, 'Picaporte', '2017-11-08 19:19:56', 'Tenedor', 'a');
+	(12, 14, 5, 'WAAAGH', '2017-12-10 00:00:00', 'WAAAAAAAAAAAAAAGH!', 'b'),
+	(13, 12, 2, 'Clasificacion Tour de Francia 2017', '2017-12-10 15:24:27', 'Chris Froome- Rigoberto Urán - Romain Bardet- Mikel Landa- Fabio Aru- Dan Martin- Simon Yates- Louis Meintjes - Alberto Contador - Warren Barguil', 'a'),
+	(14, 13, 4, 'El ultimo Jedi', '2017-12-10 15:26:32', 'Quedan 4 dias para el estreno! Alguien mas ira a verla?', 'a'),
+	(15, 13, 3, 'Coches Flotantes', '2017-12-10 15:29:29', 'Resulta que Renaul esta trabajando en coches flotantes', 'a'),
+	(16, 10, 3, 'T-800 vs T-1000', '2017-12-10 00:00:00', 'Venga, hora de discusiones. Quien ganaria en 1 contra 1?', 'b'),
+	(17, 12, 1, 'Detenido en Burgos por bajar escaleras en coche', '2017-12-10 15:33:12', 'Han detenido a un tipo que ha intentado bajar las escaleras de la catedral de burgos con su coche', 'a'),
+	(18, 9, 6, 'Reglas de los Moderadores', '2017-12-10 15:38:39', 'El cometido principal de los moderadores es vigilar que se cumplan las reglas del foro, cerrar temas inactivos e informar a los usuarios de cualquier cambio en los foros.\r\nNo abuseis de vuestros privilegios, el estado de moderador se quita mas rapido que se consigue', 'a'),
+	(19, 7, 3, 'Foro de tecnologia', '2017-12-10 18:41:14', 'El foro de tecnologia existe para discutir los ultimos avances tecnologicos', 'a');
 /*!40000 ALTER TABLE `temas` ENABLE KEYS */;
 
 -- Volcando estructura para tabla webtopics.usuarios
@@ -144,14 +131,22 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   PRIMARY KEY (`idUsuario`),
   UNIQUE KEY `apodo` (`apodo`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla webtopics.usuarios: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla webtopics.usuarios: ~9 rows (aproximadamente)
 DELETE FROM `usuarios`;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` (`idUsuario`, `nombre`, `apellidos`, `apodo`, `email`, `tipo`, `clave`, `avatar`, `fechaAlta`) VALUES
-	(3, 'Prueba', 'Prueba', 'Prueba', 'prueba@prueba.com', 'e', 'yJO61okntFfb7TlGDmr9Yg==', '3.jpg', '2017-10-01 19:00:12'),
-	(4, 'Paul', 'McCartney', 'Pmc', 'paul@mail.com', 'e', 'bGMhKrSOhAHq9rWbldgWqQ==', '4.jpg', '2017-11-08 19:15:30');
+	(5, 'Chuck', 'Norris', 'TheRealNorris', 'cnorris@email.com', 'm', 'RAQeZ6SOdikUgABmY5f/Uw==', '5.jpg', '2017-12-08 00:29:47'),
+	(7, 'Bruce', 'Lee', 'FuriaOriental', 'blee@email.com', 'm', 'sPi0nyLHGOmST1sRZREaZw==', '7.jpg', '2017-12-10 14:12:34'),
+	(8, 'Clint', 'Eastwood', '44Magnum', 'ceastwood@mail.com', 'm', 'i3GLh9cUXsyUD8IFq1dsBA==', '8.jpg', '2017-12-10 14:13:43'),
+	(9, 'Conan', 'El Cimmerio', 'ReyConan', 'conan@email.com', 'a', 'ydwAT8PQOa1/tJRW5ZArAQ==', '9.jpg', '2017-12-10 14:16:21'),
+	(10, 'Terminator', 'mk800', 'T-800', 't800@email.com', 'e', 'U43BG0tQdP6tKNGZEjvDfA==', '10.jpg', '2017-12-10 15:13:29'),
+	(11, 'El gremlin', 'mojado', 'WetGremlin', 'grem@email.com', 'b', '4hLTqybEvZ5tZRCeyEySRQ==', '11.jpg', '2017-12-10 15:14:39'),
+	(12, 'Amadís', 'de Gaula', 'Cabaclista', 'amadis@email.com', 'e', 'vaZ175y1a710aSg3cZWFCg==', '12.jpg', '2017-12-10 15:17:06'),
+	(13, 'Morador', 'de las Arenas', 'SarlaccBait', 'tusken@email.com', 'e', 'uJ76M/99xajkNOzrq12iWg==', '13.jpg', '2017-12-10 15:18:50'),
+	(14, 'Grimgor', 'IronHide', 'WAAAGH', 'grimgor@email.com', 'e', 'ccKTB7NHBSS/c3T8Td13wg==', '14.jpg', '2017-12-10 15:20:27'),
+	(15, 'Paul', 'McCartney', 'BassBeatle', 'paul@mail.com', 'e', 'bGMhKrSOhAHq9rWbldgWqQ==', '15.jpg', '2017-12-10 18:38:00');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
